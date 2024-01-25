@@ -7,6 +7,7 @@ import { addTodo } from "./store/todoSlice";
 
 function App() {
   const [text, setText] = useState("");
+  
   const dispatch = useDispatch();
 
   const addTask = () => {
