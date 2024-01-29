@@ -7,13 +7,14 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { deleteTodo, handleToggle } from "../../store/todoSlice";
+import { removeTodo, toggleStatus } from "../../store/todoSlice";
 
-const TodoItem = ({ id, text, completed }) => {
+const TodoItem = ({ id, title, completed }) => {
   const dispatch = useDispatch();
 
   return (
@@ -24,22 +25,25 @@ const TodoItem = ({ id, text, completed }) => {
           borderBottom: completed ? "1px solid #1976d2" : "1px solid white",
         }}
         secondaryAction={
-          <IconButton
-            edge="end"
-            aria-label="delete"
-            style={{ color: "white" }}
-            onClick={() => dispatch(deleteTodo({ id }))}
-          >
-            <Delete />
-          </IconButton>
+          <Tooltip title="Delete" placement="right" arrow>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              style={{ color: "white" }}
+              onClick={() => dispatch(removeTodo(id))}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip>
         }
         disablePadding
+        sx={{
+          "&:hover": {
+            backgroundColor: "rgba(25, 118, 210, 0.5)",
+          },
+        }}
       >
-        <ListItemButton
-          role={undefined}
-          onClick={() => dispatch(handleToggle({ id }))}
-          dense
-        >
+        <ListItemButton onClick={() => dispatch(toggleStatus(id))} dense>
           <ListItemIcon style={{ minWidth: "0px" }}>
             <Checkbox
               edge="start"
@@ -58,7 +62,7 @@ const TodoItem = ({ id, text, completed }) => {
                   fontSize: "20px",
                 }}
               >
-                {text}
+                {title}
               </Typography>
             }
           />
@@ -69,8 +73,8 @@ const TodoItem = ({ id, text, completed }) => {
 };
 
 TodoItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
 };
 
